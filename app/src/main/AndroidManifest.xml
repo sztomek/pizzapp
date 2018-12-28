@@ -1,0 +1,20 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="hu.sztomek.pizzapp">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application android:allowBackup="true"
+                 android:label="@string/app_name"
+                 android:icon="@mipmap/ic_launcher"
+                 android:roundIcon="@mipmap/ic_launcher_round"
+                 android:supportsRtl="true"
+                 android:theme="@style/AppTheme"
+                 android:name=".presentation.app.Pizzapplication">
+
+        <activity android:name=".presentation.screen.details.DetailsActivity"/>
+
+        <activity android:name=".presentation.screen.map.MapActivity"
+                  android:parentActivityName=".presentation.screen.map.MapActivity"/>
+
+    </application>
+</manifest>
