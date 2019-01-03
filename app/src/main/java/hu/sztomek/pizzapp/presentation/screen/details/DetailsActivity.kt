@@ -6,7 +6,6 @@ import android.widget.Toast
 import hu.sztomek.pizzapp.R
 import hu.sztomek.pizzapp.domain.Resources
 import hu.sztomek.pizzapp.domain.common.Action
-import hu.sztomek.pizzapp.domain.model.Place
 import hu.sztomek.pizzapp.presentation.common.BaseActivity
 import hu.sztomek.pizzapp.presentation.common.BaseViewModel
 import hu.sztomek.pizzapp.presentation.common.UiState
@@ -18,9 +17,9 @@ class DetailsActivity : BaseActivity<DetailsUiModel>() {
     companion object {
         private const val KEY_PLACE_ID = "placeId"
 
-        fun starter(context: Context, place: Place): Intent {
+        fun starter(context: Context, id: String): Intent {
             return Intent(context, DetailsActivity::class.java).apply {
-                putExtra(KEY_PLACE_ID, place.id)
+                putExtra(KEY_PLACE_ID, id)
             }
         }
 

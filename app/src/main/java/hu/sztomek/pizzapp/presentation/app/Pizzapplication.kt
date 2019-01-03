@@ -2,6 +2,8 @@ package hu.sztomek.pizzapp.presentation.app
 
 import dagger.android.AndroidInjector
 import dagger.android.support.DaggerApplication
+import hu.sztomek.pizzapp.presentation.di.component.DaggerAppComponent
+import net.danlew.android.joda.JodaTimeAndroid
 import timber.log.Timber
 
 class Pizzapplication : DaggerApplication() {
@@ -16,5 +18,6 @@ class Pizzapplication : DaggerApplication() {
         super.onCreate()
 
         Timber.plant(Timber.DebugTree())
+        JodaTimeAndroid.init(this)
     }
 }

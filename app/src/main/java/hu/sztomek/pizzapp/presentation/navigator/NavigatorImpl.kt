@@ -1,6 +1,7 @@
 package hu.sztomek.pizzapp.presentation.navigator
 
 import androidx.appcompat.app.AppCompatActivity
+import hu.sztomek.pizzapp.presentation.screen.details.DetailsActivity
 
 class NavigatorImpl(private var activity: AppCompatActivity? = null) : Navigator {
 
@@ -14,7 +15,7 @@ class NavigatorImpl(private var activity: AppCompatActivity? = null) : Navigator
 
     override fun showDetails(id: String) {
         activity?.let {
-            // TODO start details
+            it.startActivity(DetailsActivity.starter(it, id))
         }
     }
 }

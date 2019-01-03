@@ -84,6 +84,9 @@ dependencies {
     // MAP
     implementation "com.google.android.gms:play-services-maps:${versions.gmaps}"
 
+    // UTIL
+    implementation "net.danlew:android.joda:${versions.joda}"
+
     // TESTS
     testImplementation "junit:junit:${versions.junit}"
     testImplementation "org.mockito:mockito-core:${versions.mockito}"

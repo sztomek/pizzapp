@@ -15,7 +15,7 @@ class DeviceModule {
     @Singleton
     @Provides
     fun provideResources(application: Application): Resources {
-        return ResourcesImpl(application.resources)
+        return ResourcesImpl(application)
     }
 
     @Singleton

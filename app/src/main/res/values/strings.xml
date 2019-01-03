@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Pizzapp</string>
+    <string name="app_name">PizzApp</string>
+    <string name="msg_loading">Please wait…</string>
+    <string name="msg_unknown_error">Oops… something went wrong!</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="map_place_open">Open</string>
+    <string name="map_place_closed">Closed</string>
 </resources>

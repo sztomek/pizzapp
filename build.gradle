@@ -32,6 +32,8 @@ buildscript {
                 glide: '4.8.0',
                 // MAP
                 gmaps: '16.0.0',
+                // UTIL
+                joda: '2.10.1.1',
                 // TEST
                 junit: '4.12',
                 androidx_testing: '2.0.0',

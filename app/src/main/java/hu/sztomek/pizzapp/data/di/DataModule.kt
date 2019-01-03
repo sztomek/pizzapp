@@ -7,6 +7,7 @@ import hu.sztomek.pizzapp.data.RepositoryImpl
 import hu.sztomek.pizzapp.data.api.DatabaseApi
 import hu.sztomek.pizzapp.data.api.DatabaseApiImpl
 import hu.sztomek.pizzapp.data.api.WebApi
+import hu.sztomek.pizzapp.data.model.MyObjectBox
 import hu.sztomek.pizzapp.domain.Repository
 import io.objectbox.BoxStore
 import okhttp3.OkHttpClient
@@ -46,6 +47,7 @@ class DataModule {
     fun provideRetrofit(@Named("baseUrl") baseUrl: String, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
