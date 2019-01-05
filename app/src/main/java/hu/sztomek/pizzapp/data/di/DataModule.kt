@@ -24,7 +24,8 @@ class DataModule {
 
     @Provides
     @Named("baseUrl")
-    fun provideBaseUrl() = "https://pizzaplaces.free.beeceptor.com/"
+//    fun provideBaseUrl() = "https://pizzaplaces.free.beeceptor.com/"
+    fun provideBaseUrl() = "http://demo4327201.mockable.io/pizza-api/"
 
     @Singleton
     @Provides

@@ -2,7 +2,96 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+    <ImageView
+            android:id="@+id/details_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"/>
+
+    <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/details_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05"/>
+
+    <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/details_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/details_bookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fabSize="normal"
+            app:backgroundTint="@color/colorAccent"
+            android:src="@drawable/ic_bookmark"
+            app:layout_constraintTop_toTopOf="@+id/details_image"
+            app:layout_constraintBottom_toBottomOf="@+id/details_image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/details_end"
+            app:layout_constraintVertical_bias="0.95"
+            app:layout_constraintHorizontal_bias="1.0"/>
+
+    <androidx.appcompat.widget.AppCompatRatingBar
+            android:id="@+id/details_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/details_start"
+            app:layout_constraintEnd_toEndOf="@id/details_end"
+            app:layout_constraintTop_toBottomOf="@id/details_image"
+            tools:rating="4.0"
+            app:layout_constraintHorizontal_bias="0.0"/>
+
+    <TextView
+            android:id="@+id/details_rating_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/details_rating"
+            app:layout_constraintStart_toEndOf="@id/details_rating"
+            app:layout_constraintEnd_toEndOf="@id/details_end"
+            app:layout_constraintBottom_toBottomOf="@id/details_rating"
+            tools:text="10 ratings"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/details_friends"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/details_start"
+            app:layout_constraintEnd_toEndOf="@id/details_end"
+            app:layout_constraintTop_toBottomOf="@id/details_rating"/>
+
+    <TextView
+            android:id="@+id/details_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/details_start"
+            app:layout_constraintEnd_toEndOf="@id/details_end"
+            app:layout_constraintTop_toBottomOf="@id/details_friends"
+            tools:text="Lorem ipsum dolor sit amet blabla"/>
+
+    <Button
+            android:id="@+id/details_book_now"
+            style="?buttonStyle"
+            android:backgroundTint="@color/colorAccent"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_book_now"
+            app:layout_constraintStart_toStartOf="@id/details_start"
+            app:layout_constraintEnd_toEndOf="@id/details_end"
+            app:layout_constraintTop_toBottomOf="@id/details_text"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

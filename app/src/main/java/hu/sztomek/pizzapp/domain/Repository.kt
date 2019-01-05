@@ -2,6 +2,7 @@ package hu.sztomek.pizzapp.domain
 
 import hu.sztomek.pizzapp.domain.model.Friend
 import hu.sztomek.pizzapp.domain.model.Place
+import hu.sztomek.pizzapp.domain.model.PlaceDetails
 import io.reactivex.Flowable
 
 interface Repository {
@@ -10,6 +11,6 @@ interface Repository {
 
     fun listFriends(): Flowable<List<Friend>>
 
-    fun getPlace(id: String): Flowable<Place>
+    fun getPlace(id: String): Flowable<PlaceDetails>
 
 }

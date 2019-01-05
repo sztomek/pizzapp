@@ -2,12 +2,17 @@
     <string name="app_name">PizzApp</string>
     <string name="msg_loading">Please wait…</string>
     <string name="msg_unknown_error">Oops… something went wrong!</string>
-    <string name="title_activity_maps">Map</string>
     <string name="map_place_open">Open</string>
     <string name="map_place_closed">Closed</string>
     <string name="title_unknown_error">Error</string>
     <string name="btn_retry">Retry</string>
     <string name="btn_cancel">Cancel</string>
     <string name="title_network_error">Network error</string>
-    <string name="msg_format_network">Failed to communicate with server: %1s</string>
+    <string name="msg_format_network">Failed to communicate with server: %s</string>
+    <string name="label_book_now">Book Now</string>
+
+    <plurals name="ratings">
+        <item quantity="one">%d rating</item>
+        <item quantity="other">%d ratings</item>
+    </plurals>
 </resources>

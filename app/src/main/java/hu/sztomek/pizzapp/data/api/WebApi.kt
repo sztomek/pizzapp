@@ -9,10 +9,12 @@ import retrofit2.http.Path
 
 interface WebApi {
 
-    @GET("pizza")
+//    @GET("pizza")
+    @GET("pizzaplaces")
     fun listPlaces(): Single<ListPlacesWebResponse>
 
-    @GET("pizza/{id}")
+//    @GET("pizza/{id}")
+    @GET("pizzaplaces/{id}")
     fun placeDetails(@Path("id") id: String): Single<PlaceWebModel>
 
     @GET("friends")

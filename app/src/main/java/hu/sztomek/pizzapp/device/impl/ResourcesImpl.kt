@@ -12,9 +12,14 @@ class ResourcesImpl(private val application: Application) : Resources {
 
     private val resources: android.content.res.Resources = application.resources
 
-    override fun getString(@StringRes resourceId: Int): String  = resources.getString(resourceId) ?: "String not found!"
+    override fun getString(@StringRes resourceId: Int): String = resources.getString(resourceId) ?: "String not found!"
 
-    override fun getFormattedString(@StringRes resourceId: Int, formatArgs: Array<*>): String = resources.getString(resourceId, *formatArgs) ?: "String not found!"
+    override fun getFormattedString(@StringRes resourceId: Int, formatArgs: Array<*>): String =
+        resources.getString(resourceId, *formatArgs) ?: "String not found!"
+
+    override fun getQuantityString(@PluralsRes resourceId: Int, quantity: Int): String {
+        return resources.getQuantityString(resourceId, quantity, quantity)
+    }
 
     override fun getMarkerPadding(): Float {
         val width = resources.displayMetrics.widthPixels
@@ -33,6 +38,7 @@ class ResourcesImpl(private val application: Application) : Resources {
     }
 
     override fun getDrawable(@DrawableRes resourceId: Int): Drawable {
-        return ContextCompat.getDrawable(application, resourceId) ?: throw IllegalArgumentException("Drawable with resource id [$resourceId] not found!")
+        return ContextCompat.getDrawable(application, resourceId)
+            ?: throw IllegalArgumentException("Drawable with resource id [$resourceId] not found!")
     }
 }

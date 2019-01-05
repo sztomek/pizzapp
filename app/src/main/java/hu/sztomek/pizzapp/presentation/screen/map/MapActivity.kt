@@ -47,6 +47,8 @@ class MapActivity : BaseActivity<MapUiModel>() {
             initMap()
             displayPlacesWhenMapReady()
         }
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
     private fun initMap() {

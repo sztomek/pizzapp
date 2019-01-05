@@ -3,16 +3,15 @@ package hu.sztomek.pizzapp.data.converter
 import hu.sztomek.pizzapp.data.model.FriendWebModel
 import hu.sztomek.pizzapp.data.model.PlaceDbModel
 import hu.sztomek.pizzapp.data.model.PlaceWebModel
-import hu.sztomek.pizzapp.domain.model.Friend
-import hu.sztomek.pizzapp.domain.model.Location
-import hu.sztomek.pizzapp.domain.model.OpeningHour
-import hu.sztomek.pizzapp.domain.model.Place
+import hu.sztomek.pizzapp.domain.model.*
 import hu.sztomek.pizzapp.domain.util.TimeHelper
 import java.lang.IllegalArgumentException
 
 private const val DEFAULT_EMPTY_FIELD = "n/a"
 private const val CLOSED = "Closed"
-private const val PATTERN_REGEX_TIME = "\\d{1,2}:\\d{2}( AM)? – \\d{1,2}:\\d{2} PM"
+private const val OPENING_HOUR_SEPARATOR = "â€“"
+//private const val OPENING_HOUR_SEPARATOR = "–"
+private const val PATTERN_REGEX_TIME = "\\d{1,2}:\\d{2}( AM)? $OPENING_HOUR_SEPARATOR \\d{1,2}:\\d{2} PM"
 private val REGEX_TIME = PATTERN_REGEX_TIME.toRegex()
 
 private fun defaultStringWhenNull(input: String?): String {
@@ -37,7 +36,7 @@ private fun findTimeInString(openingHour: String, index: Int): String {
         REGEX_TIME.containsMatchIn(openingHour) -> {
             val foundTime = REGEX_TIME.find(openingHour)?.value
             if (foundTime == null) throw IllegalArgumentException("Failed to parse opening hours")
-            else foundTime.split(" – ")[index]
+            else foundTime.split(" $OPENING_HOUR_SEPARATOR ")[index]
         }
         else -> throw IllegalArgumentException("Failed to parse opening hours")
     }
@@ -67,12 +66,21 @@ private fun parseOpeningHours(openingHours: List<String>): List<OpeningHour> {
     }
 }
 
-fun PlaceWebModel.toDomain() = Place(
+fun PlaceWebModel.toPlace() = Place(
     defaultStringWhenNull(id),
     defaultStringWhenNull(name),
     Location(latitude ?: 0.0, longitude ?: 0.0),
     defaultStringWhenNull(images.firstOrNull()?.url),
     parseOpeningHours(openingHours)
+)
+
+fun PlaceWebModel.toPlaceDetails() = PlaceDetails(
+    defaultStringWhenNull(id),
+    defaultStringWhenNull(name),
+    3.0f,
+    2,
+    false,
+    defaultStringWhenNull(images.firstOrNull()?.url)
 )
 
 fun PlaceWebModel.toDb() = PlaceDbModel(
@@ -84,7 +92,7 @@ fun PlaceWebModel.toDb() = PlaceDbModel(
     System.currentTimeMillis()
 )
 
-fun PlaceDbModel.toDomain() = Place(
+fun PlaceDbModel.toPlace() = Place(
     id.toString(),
     name,
     Location(latitude, longitude),
