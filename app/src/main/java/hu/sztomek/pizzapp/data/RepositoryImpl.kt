@@ -6,10 +6,13 @@ import hu.sztomek.pizzapp.data.converter.toDomain
 import hu.sztomek.pizzapp.data.model.ListPlacesWebResponse
 import hu.sztomek.pizzapp.data.model.PlaceWebModel
 import hu.sztomek.pizzapp.domain.Repository
+import hu.sztomek.pizzapp.domain.error.DomainException
 import hu.sztomek.pizzapp.domain.model.Friend
 import hu.sztomek.pizzapp.domain.model.Place
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.SingleTransformer
+import java.io.IOException
 
 class RepositoryImpl(private val databaseApi: DatabaseApi, private val webApi: WebApi) : Repository {
 
@@ -40,9 +43,8 @@ class RepositoryImpl(private val databaseApi: DatabaseApi, private val webApi: W
     )
 
     override fun listPlaces(): Flowable<List<Place>> {
-//        return webApi.listPlaces()
-        // TODO switch back to live call
-        return DUMMY_RESPONSE
+        return webApi.listPlaces()
+            .compose(addErrorHandler())
             .map { it.list?.places }
             .map { it.map { it.toDomain() } }
             .toFlowable()
@@ -50,13 +52,27 @@ class RepositoryImpl(private val databaseApi: DatabaseApi, private val webApi: W
 
     override fun listFriends(): Flowable<List<Friend>> {
         return webApi.listFriends()
+            .compose(addErrorHandler())
             .map { it.map { it.toDomain() } }
             .toFlowable()
     }
 
     override fun getPlace(id: String): Flowable<Place> {
         return webApi.placeDetails(id)
+            .compose(addErrorHandler())
             .map { it.toDomain() }
             .toFlowable()
+    }
+
+    private fun <I> addErrorHandler(): SingleTransformer<I, I> {
+        return SingleTransformer { upstream ->
+            upstream.onErrorResumeNext {
+                val domainException = when (it) {
+                    is IOException -> DomainException.NetworkError(it.message)
+                    else -> DomainException.UnknownError(it.message)
+                }
+                Single.error(domainException)
+            }
+        }
     }
 }

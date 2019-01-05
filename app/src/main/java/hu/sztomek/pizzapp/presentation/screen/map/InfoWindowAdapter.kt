@@ -26,18 +26,18 @@ class InfoWindowAdapter @Inject constructor(private val resources: Resources, ma
     override fun getInfoContents(marker: Marker?): View? {
         var view: View? = null
         (marker?.tag as? Place)?.let {
+            this.marker = marker
             val inflatedView = layoutInflater.inflate(R.layout.layout_info_window, null)
             val title = inflatedView.findViewById<TextView>(R.id.info_window_title)
-            title.text = it.name
+            title.text = marker.title
             val content = inflatedView.findViewById<TextView>(R.id.info_window_message)
-            content.text = resources.getString(if (it.open) R.string.map_place_open else R.string.map_place_closed)
+            content.text = marker.snippet
             content.setTextColor(resources.getColor(if (it.open) R.color.open else R.color.closed))
             val image = inflatedView.findViewById<ImageView>(R.id.info_window_image)
-            this.marker = marker
             GlideApp.with(image)
                 .load(it.thumbnail)
                 .centerCrop()
-                .error(R.drawable.ic_broken_image)
+                .placeholder(R.drawable.ic_broken_image)
                 .listener(object: RequestListener<Drawable> {
                     override fun onLoadFailed(
                         e: GlideException?,
@@ -59,7 +59,7 @@ class InfoWindowAdapter @Inject constructor(private val resources: Resources, ma
                     ): Boolean {
                         val thisMarker = this@InfoWindowAdapter.marker
                         if (thisMarker != null && dataSource != DataSource.MEMORY_CACHE) {
-                            marker.showInfoWindow()
+                            thisMarker.showInfoWindow()
                         }
 
                         return false

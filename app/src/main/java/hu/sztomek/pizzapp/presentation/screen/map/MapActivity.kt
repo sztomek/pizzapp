@@ -1,7 +1,6 @@
 package hu.sztomek.pizzapp.presentation.screen.map
 
 import android.os.Bundle
-import android.widget.Toast
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLngBounds
@@ -11,13 +10,22 @@ import hu.sztomek.pizzapp.domain.common.Action
 import hu.sztomek.pizzapp.domain.model.Place
 import hu.sztomek.pizzapp.presentation.common.BaseActivity
 import hu.sztomek.pizzapp.presentation.common.BaseViewModel
+import hu.sztomek.pizzapp.presentation.common.UiError
 import hu.sztomek.pizzapp.presentation.common.UiState
+import hu.sztomek.pizzapp.presentation.common.dialog.BaseDialogFragment
+import hu.sztomek.pizzapp.presentation.common.dialog.ErrorDialogFragment
+import hu.sztomek.pizzapp.presentation.common.dialog.LoadingDialogFragment
 import hu.sztomek.pizzapp.presentation.converter.toMarker
 import hu.sztomek.pizzapp.presentation.model.MapUiModel
 import kotlinx.android.synthetic.main.activity_map.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class MapActivity : BaseActivity<MapUiModel>() {
+
+    companion object {
+        private const val DIALOG_TAG = "shown_dialog"
+    }
 
     private var map: GoogleMap? = null
 
@@ -63,7 +71,12 @@ class MapActivity : BaseActivity<MapUiModel>() {
             }
 
             if (this != null && !this.isEmpty()) {
-                map?.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), resources.getMarkerPadding().toInt()))
+                map?.animateCamera(
+                    CameraUpdateFactory.newLatLngBounds(
+                        boundsBuilder.build(),
+                        resources.getMarkerPadding().toInt()
+                    )
+                )
             }
         }
     }
@@ -132,16 +145,53 @@ class MapActivity : BaseActivity<MapUiModel>() {
         }
     }
 
+    private inline fun <reified T> findFragmentByTag(tag: String): T? {
+        return supportFragmentManager.findFragmentByTag(tag) as? T
+    }
+
+    private fun hideDialog() {
+        findFragmentByTag<BaseDialogFragment>(DIALOG_TAG)?.apply {
+            dismiss()
+        }
+    }
+
     private fun handleLoadingState(uiState: UiState.LoadingState) {
-        // TODO handle loading state
+        LoadingDialogFragment.create(LoadingDialogFragment.LoadingDialogModel(uiState.message))
+            .show(supportFragmentManager, DIALOG_TAG)
     }
 
     private fun handleErrorState(uiState: UiState.ErrorState) {
-        // TODO handle error properly - show alert dialog
-        Toast.makeText(this, uiState.uiError.message, Toast.LENGTH_LONG).show()
+        hideDialog()
+
+        val buttons: Map<ErrorDialogFragment.ErrorDialogButtons, String> = when (uiState.uiError) {
+            is UiError.General -> mapOf(ErrorDialogFragment.ErrorDialogButtons.NEUTRAL to resources.getString(android.R.string.ok))
+            is UiError.Network -> mapOf(
+                ErrorDialogFragment.ErrorDialogButtons.POSITIVE to resources.getString(R.string.btn_retry),
+                ErrorDialogFragment.ErrorDialogButtons.NEGATIVE to resources.getString(R.string.btn_cancel)
+            )
+        }
+
+        ErrorDialogFragment.create(ErrorDialogFragment.ErrorDialogModel(
+            uiState.uiError.title,
+            uiState.uiError.message,
+            buttons
+        ),
+            object : ErrorDialogFragment.ErrorDialogClickListener {
+                override fun onButtonClicked(which: ErrorDialogFragment.ErrorDialogButtons) {
+                    when (which) {
+                        ErrorDialogFragment.ErrorDialogButtons.POSITIVE -> {
+                            if (uiState.uiError is UiError.Network) {
+                                viewModel.sendAction(Action.ListPlaces)
+                            }
+                        }
+                        else -> Timber.d("Unhandled button pressed")
+                    }
+                }
+            }).show(supportFragmentManager, DIALOG_TAG)
     }
 
     private fun handleIdleState(uiState: UiState.IdleState) {
+        hideDialog()
         displayPlacesWhenMapReady()
     }
 

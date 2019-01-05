@@ -1,12 +1,11 @@
 package hu.sztomek.pizzapp.device.impl
 
 import android.app.Application
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
-import androidx.annotation.DimenRes
-import androidx.annotation.StringRes
+import android.graphics.drawable.Drawable
+import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import hu.sztomek.pizzapp.domain.Resources
+import java.lang.IllegalArgumentException
 
 
 class ResourcesImpl(private val application: Application) : Resources {
@@ -31,5 +30,9 @@ class ResourcesImpl(private val application: Application) : Resources {
     @ColorInt
     override fun getColor(@ColorRes resourceId: Int): Int {
         return ContextCompat.getColor(application, resourceId)
+    }
+
+    override fun getDrawable(@DrawableRes resourceId: Int): Drawable {
+        return ContextCompat.getDrawable(application, resourceId) ?: throw IllegalArgumentException("Drawable with resource id [$resourceId] not found!")
     }
 }
