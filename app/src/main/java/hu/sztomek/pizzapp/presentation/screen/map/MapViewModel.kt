@@ -46,7 +46,7 @@ class MapViewModel @Inject constructor(workSchedulers: WorkSchedulers,
 
     private fun mapUiError(error: DomainException): UiError {
         return when (error) {
-            is DomainException.UnknownError -> UiError.General(resources.getString(R.string.title_unknown_error), resources.getString(R.string.msg_unknown_error))
+            is DomainException.UnknownError, is DomainException.DatabaseError -> UiError.General(resources.getString(R.string.title_unknown_error), resources.getString(R.string.msg_unknown_error))
             is DomainException.NetworkError -> UiError.Network(resources.getString(R.string.title_network_error), resources.getFormattedString(R.string.msg_format_network, arrayOf(error.message)))
         }
     }

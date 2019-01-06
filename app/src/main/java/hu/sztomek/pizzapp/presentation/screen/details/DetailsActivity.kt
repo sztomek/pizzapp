@@ -124,7 +124,7 @@ class DetailsActivity : BaseActivity<DetailsUiModel>() {
                     when (which) {
                         ErrorDialogFragment.ErrorDialogButtons.POSITIVE -> {
                             if (uiState.uiError is UiError.Network) {
-                                viewModel.sendAction(Action.ListPlaces)
+                                viewModel.sendAction(Action.GetPlaceDetails(getPlaceId(intent)))
                             }
                         }
                         else -> Timber.d("Unhandled button pressed")

@@ -1,6 +1,7 @@
 package hu.sztomek.pizzapp.presentation.screen.map
 
 import android.os.Bundle
+import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLngBounds
@@ -28,6 +29,7 @@ class MapActivity : BaseActivity<MapUiModel>() {
     }
 
     private var map: GoogleMap? = null
+    private var mapOnLayoutOcurred = false
 
     @Inject
     lateinit var resources: Resources
@@ -47,6 +49,23 @@ class MapActivity : BaseActivity<MapUiModel>() {
             initMap()
             displayPlacesWhenMapReady()
         }
+
+        map_mapview.addOnLayoutChangeListener(object: View.OnLayoutChangeListener {
+            override fun onLayoutChange(
+                v: View?,
+                left: Int,
+                top: Int,
+                right: Int,
+                bottom: Int,
+                oldLeft: Int,
+                oldTop: Int,
+                oldRight: Int,
+                oldBottom: Int
+            ) {
+                mapOnLayoutOcurred = true
+                displayPlacesWhenMapReady()
+            }
+        })
 
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
@@ -72,7 +91,7 @@ class MapActivity : BaseActivity<MapUiModel>() {
                 boundsBuilder.include(markerOptions.position)
             }
 
-            if (this != null && !this.isEmpty()) {
+            if (this != null && !this.isEmpty() && mapOnLayoutOcurred) {
                 map?.animateCamera(
                     CameraUpdateFactory.newLatLngBounds(
                         boundsBuilder.build(),
