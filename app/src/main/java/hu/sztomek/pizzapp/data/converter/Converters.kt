@@ -83,21 +83,25 @@ fun PlaceWebModel.toPlaceDetails() = PlaceDetails(
     defaultStringWhenNull(images.firstOrNull()?.url)
 )
 
-fun PlaceWebModel.toDb() = PlaceDbModel(
-    id?.toLong() ?: 0L,
-    defaultStringWhenNull(name),
-    latitude ?: 0.0,
-    longitude ?: 0.0,
-    defaultStringWhenNull(images.firstOrNull()?.url),
-    System.currentTimeMillis()
-)
+fun PlaceWebModel.toDb(): PlaceDbModel {
+    val placeDbModel = PlaceDbModel()
+    placeDbModel.id = 0L
+    placeDbModel.externalId = defaultStringWhenNull(id)
+    placeDbModel.name = defaultStringWhenNull(name)
+    placeDbModel.latitude = latitude ?: 0.0
+    placeDbModel.longitude = longitude ?: 0.0
+    placeDbModel.imageUrl = defaultStringWhenNull(images.firstOrNull()?.url)
+    placeDbModel.fetched = System.currentTimeMillis()
+
+    return placeDbModel
+}
 
 fun PlaceDbModel.toPlace() = Place(
-    id.toString(),
+    externalId,
     name,
     Location(latitude, longitude),
-    url,
-    emptyList() // TODO store opening hours too!
+    imageUrl,
+    parseOpeningHours(openingHours.map { it.rawOpening })
 )
 
 fun FriendWebModel.toDomain() = Friend(
